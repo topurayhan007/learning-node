@@ -37,9 +37,22 @@ const logger = (req, res, next) => {
     console.log(req.url, req.method, req.hostname);
     next();
 };
-/* app.get("/", (req: Request, res: Response) => {
-  res.send("Hello world!");
-}); */
+// error handling
+app.get("/", logger, (req, res, next) => {
+    try {
+        // res.send("Hello world!");
+        res.send(something);
+    }
+    catch (error) {
+        console.log(error);
+        /* res.status(400).json({
+          success: false,
+          message: "failed",
+        }); */
+        // global error
+        next(error);
+    }
+});
 // params
 app.get("/:userId/:subId", logger, (req, res) => {
     console.log(req.params);
@@ -55,5 +68,20 @@ app.post("/", (req, res) => {
     res.json({
         message: "successfully received data",
     });
+});
+app.all("*", (req, res) => {
+    res.status(400).json({
+        success: false,
+        message: "Route is not found",
+    });
+});
+// Global error handler
+app.use((error, req, res, next) => {
+    if (error) {
+        res.status(400).json({
+            success: false,
+            message: "Something went wrong",
+        });
+    }
 });
 exports.default = app;
