@@ -10,3 +10,5 @@ async function bootstrap() {
     console.log(`Server is listening at port ${PORT}`);
   });
 }
+
+bootstrap();
