@@ -9,16 +9,21 @@ const app = (0, express_1.default)();
 // parsers
 app.use(express_1.default.json());
 app.use(express_1.default.text());
+// middleware
+const logger = (req, res, next) => {
+    console.log(req.url, req.method, req.hostname);
+    next();
+};
 /* app.get("/", (req: Request, res: Response) => {
   res.send("Hello world!");
 }); */
 // params
-app.get("/:userId/:subId", (req, res) => {
+app.get("/:userId/:subId", logger, (req, res) => {
     console.log(req.params);
     res.send("Hello world!");
 });
 // query
-app.get("/", (req, res) => {
+app.get("/", logger, (req, res) => {
     console.log(req.query);
     res.send("Hello world!");
 });
